@@ -49,4 +49,4 @@
 ## Phase 10: 仕上げ
 - [x] T027: ダークモード
 - [x] T028: README完成
-- [ ] T029: Chrome Web Store提出準備
+- [x] T029: Chrome Web Store提出準備
