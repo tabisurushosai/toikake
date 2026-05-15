@@ -13,6 +13,20 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
 async function handleGenerateQuestions(options) {
   try {
+    const storage = await chrome.storage.local.get(['apiKey', 'age', 'subject', 'usageCount', 'usageDate', 'isPaid']);
+    const today = new Date().toLocaleDateString('ja-JP', { timeZone: 'Asia/Tokyo' });
+    
+    let currentUsage = storage.usageCount || 0;
+    const lastUsageDate = storage.usageDate || '';
+
+    if (lastUsageDate !== today) {
+      currentUsage = 0;
+    }
+
+    if (!storage.isPaid && currentUsage >= 3) {
+      throw new Error('無料版の1日の生成回数(3回)の上限に達しました。明日またお試しください。');
+    }
+
     const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
     if (!tab) throw new Error('アクティブなタブが見つかりません。');
 
@@ -30,7 +44,6 @@ async function handleGenerateQuestions(options) {
     const extraction = results[0].result;
     if (extraction.error) throw new Error(extraction.error);
 
-    const storage = await chrome.storage.local.get(['apiKey', 'age', 'subject']);
     const prompt = getPrompt({
       age: storage.age || options.age,
       subject: storage.subject || options.subject
@@ -53,6 +66,11 @@ async function handleGenerateQuestions(options) {
       questions: data.questions
     };
     await saveHistory(historyEntry);
+
+    await chrome.storage.local.set({
+      usageCount: currentUsage + 1,
+      usageDate: today
+    });
 
     return { success: true, questions: data.questions };
   } catch (error) {
