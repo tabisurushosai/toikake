@@ -41,6 +41,16 @@ async function handleGenerateQuestions(options) {
     if (!jsonMatch) throw new Error('AIからの応答形式が正しくありません。');
     
     const data = JSON.parse(jsonMatch[0]);
+    
+    const historyEntry = {
+      id: Date.now().toString(),
+      timestamp: Date.now(),
+      url: tab.url,
+      title: extraction.title,
+      questions: data.questions
+    };
+    await saveHistory(historyEntry);
+
     return { success: true, questions: data.questions };
   } catch (error) {
     console.error('Error in handleGenerateQuestions:', error);
