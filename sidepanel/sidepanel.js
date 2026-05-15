@@ -23,9 +23,10 @@ generateBtn.addEventListener('click', async () => {
 
   try {
     const selectedAge = childSelect.value;
+    const selectedSubject = document.getElementById('subject-select').value;
     const response = await chrome.runtime.sendMessage({
       type: 'GENERATE_QUESTIONS',
-      options: { age: selectedAge }
+      options: { age: selectedAge, subject: selectedSubject }
     });
 
     if (response.success) {
