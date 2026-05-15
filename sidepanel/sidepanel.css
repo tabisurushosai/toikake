@@ -139,3 +139,30 @@ button:hover {
   border-left: 2px solid #4A90E2;
   color: #555;
 }
+
+.history-memo-container {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.history-memo-label {
+  font-size: 12px;
+  color: #777;
+  margin-bottom: 4px;
+}
+
+.history-memo-input {
+  font-family: sans-serif;
+  font-size: 13px;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  resize: vertical;
+  min-height: 40px;
+}
+
+.history-memo-input:focus {
+  outline: none;
+  border-color: #4A90E2;
+}

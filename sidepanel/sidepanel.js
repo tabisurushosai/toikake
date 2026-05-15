@@ -101,6 +101,25 @@ function loadHistory() {
         itemDiv.appendChild(qDiv);
       });
       
+      const memoDiv = document.createElement('div');
+      memoDiv.className = 'history-memo-container';
+      const memoLabel = document.createElement('label');
+      memoLabel.textContent = '子どもとの対話メモ:';
+      memoLabel.className = 'history-memo-label';
+      const memoTextarea = document.createElement('textarea');
+      memoTextarea.className = 'history-memo-input';
+      memoTextarea.placeholder = '対話の様子や反応をメモ...';
+      memoTextarea.value = entry.memo || '';
+      
+      memoTextarea.addEventListener('change', () => {
+        entry.memo = memoTextarea.value;
+        chrome.storage.local.set({ history });
+      });
+      
+      memoDiv.appendChild(memoLabel);
+      memoDiv.appendChild(memoTextarea);
+      itemDiv.appendChild(memoDiv);
+      
       historyListDiv.appendChild(itemDiv);
     });
   });
