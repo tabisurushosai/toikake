@@ -57,3 +57,24 @@ async function handleGenerateQuestions(options) {
     return { success: false, error: error.message };
   }
 }
+
+async function saveHistory(entry) {
+  const result = await chrome.storage.local.get(['history']);
+  const history = result.history || [];
+  history.unshift(entry);
+  await chrome.storage.local.set({ history });
+}
+
+chrome.runtime.onInstalled.addListener(() => {
+  chrome.contextMenus.create({
+    id: 'toikake-generate',
+    title: 'Toikakeで問いかけ生成',
+    contexts: ['all']
+  });
+});
+
+chrome.contextMenus.onClicked.addListener((info, tab) => {
+  if (info.menuItemId === 'toikake-generate') {
+    chrome.sidePanel.open({ windowId: tab.windowId });
+  }
+});
