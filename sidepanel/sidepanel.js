@@ -1,5 +1,20 @@
 const generateBtn = document.getElementById('generate');
 const resultsDiv = document.getElementById('results');
+const childSelect = document.getElementById('child-select');
+
+document.addEventListener('DOMContentLoaded', () => {
+  chrome.storage.local.get(['children'], (result) => {
+    if (result.children && result.children.length > 0) {
+      result.children.forEach(child => {
+        const option = document.createElement('option');
+        option.value = child.age;
+        option.textContent = `${child.name} (${child.age}歳)`;
+        childSelect.appendChild(option);
+      });
+      childSelect.selectedIndex = 1; // Default to first child if exists
+    }
+  });
+});
 
 generateBtn.addEventListener('click', async () => {
   generateBtn.disabled = true;
@@ -7,9 +22,10 @@ generateBtn.addEventListener('click', async () => {
   resultsDiv.innerHTML = '<p>AIが考え中... (数十秒かかることがあります)</p>';
 
   try {
+    const selectedAge = childSelect.value;
     const response = await chrome.runtime.sendMessage({
       type: 'GENERATE_QUESTIONS',
-      options: {} // Default options
+      options: { age: selectedAge }
     });
 
     if (response.success) {
