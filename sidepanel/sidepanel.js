@@ -58,6 +58,13 @@ function loadHistory() {
       itemDiv.className = 'history-item';
       
       const dateStr = new Date(entry.timestamp).toLocaleString();
+      
+      const headerDiv = document.createElement('div');
+      headerDiv.className = 'history-header';
+
+      const titleGroup = document.createElement('div');
+      titleGroup.className = 'history-title-group';
+
       const dateDiv = document.createElement('div');
       dateDiv.className = 'history-date';
       dateDiv.textContent = dateStr;
@@ -66,8 +73,26 @@ function loadHistory() {
       titleDiv.className = 'history-title';
       titleDiv.textContent = entry.title || 'タイトルなし';
       
-      itemDiv.appendChild(dateDiv);
-      itemDiv.appendChild(titleDiv);
+      titleGroup.appendChild(dateDiv);
+      titleGroup.appendChild(titleDiv);
+
+      const favBtn = document.createElement('button');
+      favBtn.className = 'favorite-btn';
+      favBtn.textContent = entry.favorite ? '★' : '☆';
+      if (entry.favorite) {
+        favBtn.classList.add('favorited');
+      }
+      favBtn.addEventListener('click', () => {
+        entry.favorite = !entry.favorite;
+        chrome.storage.local.set({ history }, () => {
+          loadHistory();
+        });
+      });
+
+      headerDiv.appendChild(titleGroup);
+      headerDiv.appendChild(favBtn);
+      
+      itemDiv.appendChild(headerDiv);
       
       entry.questions.forEach(q => {
         const qDiv = document.createElement('div');
