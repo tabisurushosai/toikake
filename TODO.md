@@ -13,10 +13,10 @@
 - [x] T006: 抽出失敗時のフォールバック(document.body.innerText)
 
 ## Phase 3: AI生成
-- [ ] T007: lib/ai.js でGemini APIクライアント
-- [ ] T008: lib/prompts.js で5タイプの質問プロンプトを定義
-- [ ] T009: バックグラウンドServiceWorker経由でAPI呼び出し
-- [ ] T010: 結果をサイドパネルにカードで表示
+- [x] T007: lib/ai.js でGemini APIクライアント
+- [x] T008: lib/prompts.js で5タイプの質問プロンプトを定義
+- [x] T009: バックグラウンドServiceWorker経由でAPI呼び出し
+- [x] T010: 結果をサイドパネルにカードで表示
 
 ## Phase 4: 設定
 - [ ] T011: options/options.html で子どもの年齢設定(複数子ども対応)

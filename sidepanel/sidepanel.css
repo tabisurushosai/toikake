@@ -29,3 +29,33 @@ button {
 button:hover {
   background-color: #357ABD;
 }
+
+.card {
+  background-color: white;
+  padding: 12px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  margin-bottom: 12px;
+  border-left: 4px solid #4A90E2;
+}
+
+.card-type {
+  font-size: 12px;
+  font-weight: bold;
+  color: #4A90E2;
+  margin-bottom: 4px;
+}
+
+.card-text {
+  font-size: 14px;
+  color: #333;
+  line-height: 1.5;
+}
+
+.error {
+  color: #d93025;
+  font-size: 14px;
+  background-color: #fce8e6;
+  padding: 8px;
+  border-radius: 4px;
+}
