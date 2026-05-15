@@ -1,6 +1,9 @@
 import { generateToikake } from '../lib/ai.js';
 import { getPrompt } from '../lib/prompts.js';
 
+// Setup side panel behavior
+chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true }).catch(console.error);
+
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.type === 'GENERATE_QUESTIONS') {
     handleGenerateQuestions(message.options).then(sendResponse);
