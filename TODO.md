@@ -4,7 +4,7 @@
 
 ## Phase 1: スケルトン
 - [x] T001: manifest.json (Manifest V3、side_panel設定)
-- [ ] T002: icons/ (吹き出しアイコン)
+- [x] T002: icons/ (吹き出しアイコン)
 - [ ] T003: sidepanel/sidepanel.html で「問いかけを生成」ボタンだけ表示
 
 ## Phase 2: ページ本文抽出
