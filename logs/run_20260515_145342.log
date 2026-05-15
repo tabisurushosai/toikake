@@ -5,3 +5,4 @@
 YOLO mode is enabled. All tool calls will be automatically approved.
 YOLO mode is enabled. All tool calls will be automatically approved.
 Ripgrep is not available. Falling back to GrepTool.
+[WebFetchTool] Primary fetch failed, falling back: Primary fetch returned no content

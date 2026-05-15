@@ -8,7 +8,7 @@
 - [x] T003: sidepanel/sidepanel.html で「問いかけを生成」ボタンだけ表示
 
 ## Phase 2: ページ本文抽出
-- [ ] T004: Readability.js を同梱(Mozilla公式、CDNではなくローカル配置)
+- [x] T004: Readability.js を同梱(Mozilla公式、CDNではなくローカル配置)
 - [ ] T005: content/extract.js でアクティブタブの本文を抽出
 - [ ] T006: 抽出失敗時のフォールバック(document.body.innerText)
 
