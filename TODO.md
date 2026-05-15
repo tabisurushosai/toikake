@@ -3,7 +3,7 @@
 各タスクを上から1個ずつ消化。SPEC.md v1_0 参照。
 
 ## Phase 1: スケルトン
-- [ ] T001: manifest.json (Manifest V3、side_panel設定)
+- [x] T001: manifest.json (Manifest V3、side_panel設定)
 - [ ] T002: icons/ (吹き出しアイコン)
 - [ ] T003: sidepanel/sidepanel.html で「問いかけを生成」ボタンだけ表示
 
