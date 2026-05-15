@@ -45,7 +45,16 @@ function saveOptions() {
     }
   });
 
-  chrome.storage.local.set({ children: children }, () => {
+  const subjectMode = document.getElementById('subject-mode').value;
+  const apiKey = document.getElementById('api-key').value;
+  const isPaid = document.getElementById('is-paid').checked;
+
+  chrome.storage.local.set({ 
+    children: children,
+    subjectMode: subjectMode,
+    apiKey: apiKey,
+    isPaid: isPaid
+  }, () => {
     const message = document.getElementById('save-message');
     message.style.display = 'block';
     setTimeout(() => {
@@ -55,12 +64,15 @@ function saveOptions() {
 }
 
 function restoreOptions() {
-  chrome.storage.local.get(['children', 'subjectMode', 'apiKey'], (result) => {
+  chrome.storage.local.get(['children', 'subjectMode', 'apiKey', 'isPaid'], (result) => {
     if (result.apiKey) {
       document.getElementById('api-key').value = result.apiKey;
     }
     if (result.subjectMode) {
       document.getElementById('subject-mode').value = result.subjectMode;
+    }
+    if (result.isPaid) {
+      document.getElementById('is-paid').checked = result.isPaid;
     }
     if (result.children && result.children.length > 0) {
       result.children.forEach(child => {
