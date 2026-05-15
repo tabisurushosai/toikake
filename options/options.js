@@ -55,7 +55,10 @@ function saveOptions() {
 }
 
 function restoreOptions() {
-  chrome.storage.local.get(['children', 'subjectMode'], (result) => {
+  chrome.storage.local.get(['children', 'subjectMode', 'apiKey'], (result) => {
+    if (result.apiKey) {
+      document.getElementById('api-key').value = result.apiKey;
+    }
     if (result.subjectMode) {
       document.getElementById('subject-mode').value = result.subjectMode;
     }
@@ -64,6 +67,10 @@ function restoreOptions() {
         addChildEntry(child.name, child.age);
       });
     } else {
+      addChildEntry(); // default empty entry
+    }
+  });
+}else {
       addChildEntry(); // default empty entry
     }
   });
