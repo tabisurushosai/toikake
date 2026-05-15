@@ -55,7 +55,10 @@ function saveOptions() {
 }
 
 function restoreOptions() {
-  chrome.storage.local.get(['children'], (result) => {
+  chrome.storage.local.get(['children', 'subjectMode'], (result) => {
+    if (result.subjectMode) {
+      document.getElementById('subject-mode').value = result.subjectMode;
+    }
     if (result.children && result.children.length > 0) {
       result.children.forEach(child => {
         addChildEntry(child.name, child.age);
