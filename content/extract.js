@@ -1,4 +1,14 @@
 (function() {
+  const selection = window.getSelection().toString().trim();
+  if (selection) {
+    return {
+      title: document.title,
+      textContent: selection,
+      excerpt: '',
+      method: 'selection'
+    };
+  }
+
   // Readability is expected to be loaded in the same context or as a dependency.
   // In a Chrome extension, we can inject both or bundle them.
   
