@@ -7,27 +7,40 @@
 </head>
 <body>
   <div class="container">
-    <h1>Toikake</h1>
-    <p>現在のページから問いかけを生成します。</p>
-    <div style="margin-bottom: 10px;">
-      <label for="child-select">対象の子ども:</label>
-      <select id="child-select">
-        <option value="">設定なし</option>
-      </select>
+    <div class="tabs">
+      <button id="tab-main" class="tab-btn active">生成</button>
+      <button id="tab-history" class="tab-btn">履歴</button>
     </div>
-    <div style="margin-bottom: 10px;">
-      <label for="subject-select">教科モード:</label>
-      <select id="subject-select">
-        <option value="">指定なし</option>
-        <option value="国語">国語</option>
-        <option value="算数">算数</option>
-        <option value="理科">理科</option>
-        <option value="社会">社会</option>
-        <option value="道徳">道徳</option>
-      </select>
+    
+    <div id="view-main">
+      <h1>Toikake</h1>
+      <p>現在のページから問いかけを生成します。</p>
+      <div style="margin-bottom: 10px;">
+        <label for="child-select">対象の子ども:</label>
+        <select id="child-select">
+          <option value="">設定なし</option>
+        </select>
+      </div>
+      <div style="margin-bottom: 10px;">
+        <label for="subject-select">教科モード:</label>
+        <select id="subject-select">
+          <option value="">指定なし</option>
+          <option value="国語">国語</option>
+          <option value="算数">算数</option>
+          <option value="理科">理科</option>
+          <option value="社会">社会</option>
+          <option value="道徳">道徳</option>
+        </select>
+      </div>
+      <button id="generate">問いかけを生成</button>
+      <div id="results"></div>
     </div>
-    <button id="generate">問いかけを生成</button>
-    <div id="results"></div>
+
+    <div id="view-history" style="display: none;">
+      <h2 style="font-size: 16px; margin: 0 0 10px 0;">履歴</h2>
+      <button id="refresh-history" style="margin-bottom: 10px;">更新</button>
+      <div id="history-list"></div>
+    </div>
   </div>
   <script src="sidepanel.js"></script>
 </body>

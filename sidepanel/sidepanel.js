@@ -2,6 +2,14 @@ const generateBtn = document.getElementById('generate');
 const resultsDiv = document.getElementById('results');
 const childSelect = document.getElementById('child-select');
 
+// Tab elements
+const tabMain = document.getElementById('tab-main');
+const tabHistory = document.getElementById('tab-history');
+const viewMain = document.getElementById('view-main');
+const viewHistory = document.getElementById('view-history');
+const refreshHistoryBtn = document.getElementById('refresh-history');
+const historyListDiv = document.getElementById('history-list');
+
 document.addEventListener('DOMContentLoaded', () => {
   chrome.storage.local.get(['children'], (result) => {
     if (result.children && result.children.length > 0) {
@@ -14,7 +22,64 @@ document.addEventListener('DOMContentLoaded', () => {
       childSelect.selectedIndex = 1; // Default to first child if exists
     }
   });
+  loadHistory();
 });
+
+// Tab switching logic
+tabMain.addEventListener('click', () => {
+  tabMain.classList.add('active');
+  tabHistory.classList.remove('active');
+  viewMain.style.display = 'block';
+  viewHistory.style.display = 'none';
+});
+
+tabHistory.addEventListener('click', () => {
+  tabHistory.classList.add('active');
+  tabMain.classList.remove('active');
+  viewHistory.style.display = 'block';
+  viewMain.style.display = 'none';
+  loadHistory();
+});
+
+refreshHistoryBtn.addEventListener('click', loadHistory);
+
+function loadHistory() {
+  chrome.storage.local.get(['history'], (result) => {
+    const history = result.history || [];
+    historyListDiv.innerHTML = '';
+    
+    if (history.length === 0) {
+      historyListDiv.innerHTML = '<p>履歴がありません。</p>';
+      return;
+    }
+
+    history.forEach(entry => {
+      const itemDiv = document.createElement('div');
+      itemDiv.className = 'history-item';
+      
+      const dateStr = new Date(entry.timestamp).toLocaleString();
+      const dateDiv = document.createElement('div');
+      dateDiv.className = 'history-date';
+      dateDiv.textContent = dateStr;
+      
+      const titleDiv = document.createElement('div');
+      titleDiv.className = 'history-title';
+      titleDiv.textContent = entry.title || 'タイトルなし';
+      
+      itemDiv.appendChild(dateDiv);
+      itemDiv.appendChild(titleDiv);
+      
+      entry.questions.forEach(q => {
+        const qDiv = document.createElement('div');
+        qDiv.className = 'history-question';
+        qDiv.innerHTML = `<strong>[${q.type}]</strong> ${q.text}`;
+        itemDiv.appendChild(qDiv);
+      });
+      
+      historyListDiv.appendChild(itemDiv);
+    });
+  });
+}
 
 generateBtn.addEventListener('click', async () => {
   generateBtn.disabled = true;
@@ -31,6 +96,7 @@ generateBtn.addEventListener('click', async () => {
 
     if (response.success) {
       displayResults(response.questions);
+      loadHistory(); // Refresh history quietly
     } else {
       resultsDiv.innerHTML = `<p class="error">エラー: ${response.error}</p>`;
     }
