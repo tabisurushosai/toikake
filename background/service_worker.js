@@ -1,5 +1,6 @@
 import { generateToikake } from '../lib/ai.js';
 import { getPrompt } from '../lib/prompts.js';
+import { getFallbackQuestions } from '../lib/fallback.js';
 
 // Setup side panel behavior
 chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true }).catch(console.error);
@@ -15,7 +16,7 @@ async function handleGenerateQuestions(options) {
   try {
     const storage = await chrome.storage.local.get(['apiKey', 'age', 'subject', 'usageCount', 'usageDate', 'isPaid']);
     const today = new Date().toLocaleDateString('ja-JP', { timeZone: 'Asia/Tokyo' });
-    
+
     let currentUsage = storage.usageCount || 0;
     const lastUsageDate = storage.usageDate || '';
 
@@ -44,26 +45,43 @@ async function handleGenerateQuestions(options) {
     const extraction = results[0].result;
     if (extraction.error) throw new Error(extraction.error);
 
-    const prompt = getPrompt({
+    const promptOptions = {
       age: storage.age || options.age,
       subject: storage.subject || options.subject
-    });
+    };
 
-    const aiResponse = await generateToikake(storage.apiKey, prompt, extraction.textContent);
-    
-    // AI response is expected to be JSON. Let's try to parse it.
-    // Sometimes AI adds markdown backticks.
-    const jsonMatch = aiResponse.match(/\{[\s\S]*\}/);
-    if (!jsonMatch) throw new Error('AIからの応答形式が正しくありません。');
-    
-    const data = JSON.parse(jsonMatch[0]);
-    
+    let questions = null;
+    let source = 'builtin';
+
+    // APIキーがある場合のみ AI 生成を試みる。失敗時は内蔵問いかけ集にフォールバック。
+    if (storage.apiKey) {
+      try {
+        const prompt = getPrompt(promptOptions);
+        const aiResponse = await generateToikake(storage.apiKey, prompt, extraction.textContent);
+        const jsonMatch = aiResponse.match(/\{[\s\S]*\}/);
+        if (!jsonMatch) throw new Error('AIからの応答形式が正しくありません。');
+        const data = JSON.parse(jsonMatch[0]);
+        if (data && Array.isArray(data.questions) && data.questions.length > 0) {
+          questions = data.questions;
+          source = 'ai';
+        }
+      } catch (aiError) {
+        console.warn('AI生成に失敗したため内蔵問いかけ集を使用します:', aiError.message);
+      }
+    }
+
+    // APIキー未設定、または AI 生成に失敗した場合は内蔵問いかけ集を使う。
+    if (!questions) {
+      questions = getFallbackQuestions(promptOptions);
+      source = 'builtin';
+    }
+
     const historyEntry = {
       id: Date.now().toString(),
       timestamp: Date.now(),
       url: tab.url,
       title: extraction.title,
-      questions: data.questions
+      questions: questions
     };
     await saveHistory(historyEntry);
 
@@ -72,7 +90,7 @@ async function handleGenerateQuestions(options) {
       usageDate: today
     });
 
-    return { success: true, questions: data.questions };
+    return { success: true, questions: questions, source: source };
   } catch (error) {
     console.error('Error in handleGenerateQuestions:', error);
     return { success: false, error: error.message };
