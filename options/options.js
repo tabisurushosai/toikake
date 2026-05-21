@@ -82,8 +82,4 @@ function restoreOptions() {
       addChildEntry(); // default empty entry
     }
   });
-}else {
-      addChildEntry(); // default empty entry
-    }
-  });
 }

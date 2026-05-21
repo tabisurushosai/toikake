@@ -34,6 +34,11 @@
 - 子どもの年齢設定 (複数登録対応)
 - 教科特化モードのデフォルト選択
 
+## リリース情報
+
+- Repository: https://github.com/tabisurushosai/toikake
+- Privacy Policy: https://github.com/tabisurushosai/toikake/blob/main/legal/PRIVACY.md
+
 ## 使用技術
 
 - Chrome拡張機能 (Manifest V3) / Side Panel API
