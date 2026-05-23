@@ -14,7 +14,7 @@ Toikake は、保護者が今読んでいる Web ページ・絵本・動画な�
 
 ### 収集する情報
 
-本拡張機能は、利用者を特定する情報 (氏名、住所、メールアドレス、IPアドレス、年齢、その他の個人識別情報) を**一切収集しません**。
+本拡張機能および開発者は、利用者を特定する情報 (氏名、住所、メールアドレス、IPアドレス、その他の個人識別情報) を開発者のサーバーへ**一切送信・収集しません**。
 
 以下のデータはすべて利用者の端末内 (`chrome.storage.local`) にのみ保存され、開発者のサーバーには送信されません:
 
@@ -22,14 +22,15 @@ Toikake は、保護者が今読んでいる Web ページ・絵本・動画な�
 - 問いかけの生成履歴 (ページタイトル、URL、生成された問いかけ文)
 - お気に入りに登録した問いかけ
 - 対話メモ
-- 年齢設定 (幼児〜中学生)、教科設定 (国語・算数・理科・社会・道徳)
+- 子どもの表示名またはニックネーム (入力した場合) と年齢設定、教科設定 (国語・算数・理科・社会・道徳)
 - ダークモードなどの表示設定
+- 無料版の利用回数・利用日、有料版の有効状態
 
 ### 外部サービスとの通信 (Web サイトのコンテンツ取得について)
 
 本拡張機能は、利用者が明示的に「このページから問いかけを生成」ボタンをクリックした時のみ、以下の動作を行います:
 
-1. **アクティブタブのページ本文取得**: `activeTab` および `scripting` 権限を用いて、利用者が現在表示中のタブからページのテキストコンテンツ (本文・タイトル) を取得します。`<all_urls>` のホスト権限は、どのような Web ページからでも問いかけ生成を可能にするために必要です。
+1. **アクティブタブのページ本文取得**: `activeTab` および `scripting` 権限を用いて、利用者が現在表示中のタブからページのテキストコンテンツ (本文・タイトル) を取得します。
 
 2. **Google Gemini API への送信**: 取得したページコンテンツを、利用者が自身で設定した Google Gemini API キーを用いて Google Generative Language API (`generativelanguage.googleapis.com`) に送信し、問いかけを生成します。送信される情報はページ本文と生成パラメータ (年齢設定・教科設定) のみで、利用者個人を特定する情報や閲覧履歴・ブラウジングデータは一切含まれません。
 
@@ -39,11 +40,11 @@ Toikake は、保護者が今読んでいる Web ページ・絵本・動画な�
 
 ### 有料プランの決済について
 
-Toikake プレミアム (月額500円) の決済は、外部の決済プロバイダ (Stripe 社) のチェックアウトページで処理されます。本拡張機能および開発者は、クレジットカード番号などの決済情報を**取り扱いません**。決済情報の取扱いについては、[Stripe のプライバシーポリシー](https://stripe.com/jp/privacy)をご参照ください。
+現行バージョンの本拡張機能は、決済ページを開いたり、決済プロバイダに情報を送信したりしません。本拡張機能および開発者は、クレジットカード番号などの決済情報を**取り扱いません**。有料版の有効状態は、利用者の端末内 (`chrome.storage.local`) の設定としてのみ保存されます。
 
 ### 第三者への提供
 
-本拡張機能は、いかなる利用者データも第三者に販売または転送しません。また、信用度の評価や融資判定などの目的にも一切使用しません。
+本拡張機能は、上記の Google Gemini API への送信を除き、利用者データを第三者に販売または転送しません。また、信用度の評価や融資判定などの目的にも一切使用しません。
 
 ### 著作権への配慮
 
@@ -71,7 +72,7 @@ Toikake is a Chrome extension (side panel) that uses Google Gemini AI to generat
 
 ### Data We Collect
 
-The extension does **not collect any personally identifiable information** (name, address, email, IP address, age, etc.).
+The extension and its developer do **not transmit or collect personally identifiable information** (name, address, email, IP address, etc.) on the developer's servers.
 
 The following data is stored **only on the user's local device** (`chrome.storage.local`) and is never transmitted to the developer's servers:
 
@@ -79,14 +80,15 @@ The following data is stored **only on the user's local device** (`chrome.storag
 - Question generation history (page title, URL, generated question text)
 - Bookmarked questions
 - Conversation notes
-- Age settings (toddler to middle school), subject settings (Language Arts, Math, Science, Social Studies, Ethics)
+- Child display names or nicknames (if entered), age settings, subject settings (Language Arts, Math, Science, Social Studies, Ethics)
 - Display preferences (e.g. dark mode)
+- Free-plan usage count/date and premium enablement status
 
 ### Communication with External Services (Webpage Content Access)
 
 The extension performs the following only when the user **explicitly clicks the "Generate Questions from This Page" button**:
 
-1. **Active tab content retrieval**: Using the `activeTab` and `scripting` permissions, the extension reads the text content (body and title) of the currently displayed tab. The `<all_urls>` host permission is required so that questions can be generated from any webpage the user chooses.
+1. **Active tab content retrieval**: Using the `activeTab` and `scripting` permissions, the extension reads the text content (body and title) of the currently displayed tab.
 
 2. **Sending data to Google Gemini API**: The retrieved page content is sent to Google's Generative Language API (`generativelanguage.googleapis.com`) using the user's own API key, in order to generate questions. Only the page content and generation parameters (age / subject) are sent — no user-identifiable information, browsing history, or activity data is included.
 
@@ -96,11 +98,11 @@ Use of the Google Gemini API is also subject to [Google's Privacy Policy](https:
 
 ### Premium Plan Payments
 
-Payments for Toikake Premium (¥500/month) are processed by Stripe, a third-party payment provider. The extension and its developer **do not handle credit card numbers or other payment details**. See [Stripe's Privacy Policy](https://stripe.com/privacy) for how Stripe handles payment data.
+The current version of the extension does not open payment pages or send information to a payment provider. The extension and its developer **do not handle credit card numbers or other payment details**. Premium enablement status is stored only as a setting on the user's local device (`chrome.storage.local`).
 
 ### Third-party Sharing
 
-The extension does **not sell or transfer any user data to third parties**. User data is **not used for creditworthiness or lending decisions**.
+Except for the Google Gemini API transmission described above, the extension does **not sell or transfer user data to third parties**. User data is **not used for creditworthiness or lending decisions**.
 
 ### Copyright
 
